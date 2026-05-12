@@ -36,3 +36,8 @@ jobs:
       with:
         name: reports
         path: reports/
+
+    - name: Rollback  
+      if: failure()
+      run: bash scripts/rollback.sh
+      
