@@ -1,0 +1,3 @@
+pipeline:
+  build: success
+  test: success
