@@ -1,0 +1,38 @@
+name: DevOps CI Pipeline
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+
+  build-test-security:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Build Stage
+      run: echo "Building Application"
+
+    - name: Test Stage
+      run: echo "Running Tests"
+
+    - name: Install Conftest
+      run: |
+        wget https://github.com/open-policy-agent/conftest/releases/download/v0.55.0/conftest_0.55.0_Linux_x86_64.tar.gz
+        tar xzf conftest_0.55.0_Linux_x86_64.tar.gz
+        sudo mv conftest /usr/local/bin
+
+    - name: Run OPA Policies
+      run: |
+        conftest test deployments/deployment.yaml --policy policies/
+
+    - name: Save Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: reports
+        path: reports/
